@@ -146,13 +146,75 @@ class TMExpirationDatePlugin
             $expiration_date = date('Y-m-d', strtotime($creation_date . ' + ' . $validity_duration));
             $expiration_date_formatted = date_i18n(get_option('date_format'), strtotime($expiration_date));
 
+            $normalized = $this->fixSingularText($validity_duration);
+            $translated = $this->translateExpirationText($normalized);
+
             if ($validity_duration != '') {
-                echo '<pre style="margin: 0;font-size: 11px;line-height: 14px;"><em>' . esc_html($validity_duration) . '</em><br /><strong>' .  esc_html($expiration_date_formatted) . '</strong></pre>';
+                echo '<pre style="margin: 0;font-size: 11px;line-height: 14px;"><em>' . esc_html($translated) . '</em><br /><strong>' .  esc_html($expiration_date_formatted) . '</strong></pre>';
             } else {
                 echo '<pre style="margin: 0;font-size: 11px;line-height: 14px;opacity: 0.5">' . __('n/a', 'dl-ticket-manager-expiration-date') . '</pre>';
             }
         }
     }
+
+    /**
+     * Corrige el texto para usar la forma singular cuando es necesario
+     * @param string $text
+     * @return string
+     * @author Daniel Lucia
+     */
+    private function fixSingularText(string $text): string
+    {
+
+        return preg_replace_callback(
+            '/(\d+)\s+(hours|days|weeks|months|years)/',
+            function ($matches) {
+
+                $number = (int) $matches[1];
+                $unit   = $matches[2];
+
+                // Si es 1, usar singular
+                if ($number === 1) {
+                    //Quitamos la s final a $unit
+                    $unit = rtrim($unit, 's');
+                    return $number . ' ' . $unit;
+                }
+
+                // Si es mayor, mantener plural
+                return $number . ' ' . $unit;
+            },
+            $text
+        );
+    }
+
+    /**
+     * Traduce el texto normalizado por fixSingularText()
+     * @param string $text
+     * @return string
+     * @author Daniel Lucia
+     */
+    private function translateExpirationText(string $text): string
+    {
+        return preg_replace_callback(
+            '/(\d+)\s+(hour|day|week|month|year)s?/',
+            function ($matches) {
+                $number = (int) $matches[1];
+                $unit   = $matches[2];
+
+                // Traducción con pluralización
+                $translation = _n(
+                    $unit,       // Singular
+                    $unit . 's', // Plural
+                    $number,
+                    'rw-plugin'  // Textdomain de tu plugin
+                );
+
+                return sprintf('%d %s', $number, $translation);
+            },
+            $text
+        );
+    }
+
 
     /**
      * Añadimos estilos personalizados a las columnas
@@ -179,12 +241,11 @@ class TMExpirationDatePlugin
         $expiration_date = date('Y-m-d', strtotime($creation_date . ' + ' . $validity_duration));
 
         if ($expiration_date < date('Y-m-d')) {
-            
+
             return new \WP_Error(
-                'ticket_expired', 
+                'ticket_expired',
                 __('The ticket has expired.', 'dl-ticket-manager-expiration-date')
             );
-            
         }
 
         return true;
