@@ -1,4 +1,4 @@
-# [RW] Tickets Expiration
+# Tickets Expiration for Ticket Manager
 
 ## Descripción
 Esta extensión añade una fecha de expiración a los tickets generados.  
