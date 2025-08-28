@@ -147,7 +147,7 @@ class TMExpirationDatePlugin
             $expiration_date_formatted = date_i18n(get_option('date_format'), strtotime($expiration_date));
 
             if ($validity_duration != '') {
-                echo '<pre style="margin: 0;font-size: 11px;line-height: 14px;">' . esc_html($validity_duration) . '<br /><strong>' .  esc_html($expiration_date_formatted) . '</strong></pre>';
+                echo '<pre style="margin: 0;font-size: 11px;line-height: 14px;"><em>' . esc_html($validity_duration) . '</em><br /><strong>' .  esc_html($expiration_date_formatted) . '</strong></pre>';
             } else {
                 echo '<pre style="margin: 0;font-size: 11px;line-height: 14px;opacity: 0.5">' . __('n/a', 'dl-ticket-manager-expiration-date') . '</pre>';
             }
