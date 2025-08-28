@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Expiration date for Ticket Manager
+ * Plugin Name: Tickets Expiration for Ticket Manager
  * Description: Fecha de validez para el gestor de tickets.
  * Version: 0.0.2
  * Author: Daniel Lúcia
