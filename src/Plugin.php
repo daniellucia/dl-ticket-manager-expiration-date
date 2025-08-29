@@ -17,7 +17,7 @@ class TMExpirationDatePlugin
 
         add_filter('dl_ticket_manager_create_ticket', [$this, 'filterCreateTicket']);
         add_filter('dl_ticket_manager_get_ticket_data', [$this, 'filterGetTicket']);
-        add_filter('dltm_validate_ticket_data', [$this, 'validateTicket']);
+        add_filter('dl_validate_ticket_data', [$this, 'validateTicket']);
     }
 
     /**
