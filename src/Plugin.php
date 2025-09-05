@@ -1,8 +1,10 @@
 <?php
 
+namespace DL\TicketsExpirationDate;
+
 defined('ABSPATH') || exit;
 
-class TMExpirationDatePlugin
+class Plugin
 {
 
     private $units;
@@ -233,7 +235,7 @@ class TMExpirationDatePlugin
     /**
      * Validamos el ticket
      * @param mixed $ticket
-     * @return bool
+     * @return true|\WP_Error
      * @author Daniel Lucia
      */
     public function validateTicket($ticket)
